@@ -56,7 +56,7 @@ def inject_logged_in():
 def forum_login():
     return render_template('forum.html')
 
-@app.route('/') 
+@app.route('/home') 
 def forum_home():
     return render_template('actualforum.html)
 
