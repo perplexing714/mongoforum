@@ -58,7 +58,7 @@ def forum_login():
 
 @app.route('/home') 
 def forum_home():
-    return render_template('actualforum.html)
+    return render_template('actualforum.html')
 
 #redirect to GitHub's OAuth page and confirm callback URL
 @app.route('/login')
