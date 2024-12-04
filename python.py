@@ -54,11 +54,11 @@ def inject_logged_in():
 
 @app.route('/')
 def forum_login():
-    return render_template('login.html')
+    return render_template('forum.html')
 
 @app.route('/') 
 def forum_home():
-    return render_template('forum.html)
+    return render_template('actualforum.html)
 
 #redirect to GitHub's OAuth page and confirm callback URL
 @app.route('/login')
