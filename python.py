@@ -53,8 +53,12 @@ def inject_logged_in():
     return {"logged_in":is_logged_in}
 
 @app.route('/')
+def forum_login():
+    return render_template('login.html')
+
+@app.route('/') 
 def forum_home():
-    return render_template('forum.html')
+    return render_template('forum.html)
 
 #redirect to GitHub's OAuth page and confirm callback URL
 @app.route('/login')
@@ -79,7 +83,7 @@ def authorized():
             #pprint.pprint(vars(github['/email']))
             #pprint.pprint(vars(github['api/2/accounts/profile/']))
             message='You were successfully logged in as ' + session['user_data']['login'] + '.'
-            return redirect(url_for('page2'))
+            return redirect(url_for('forum_home'))
         except Exception as inst:
             session.clear()
             print(inst)
