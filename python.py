@@ -56,9 +56,9 @@ def inject_logged_in():
 def forum_login():
     return render_template('forum.html')
 
-@app.route('/home') 
+@app.route('/forum') 
 def forum_home():
-    return render_template('actualforum.html)
+    return render_template('actualforum.html')
 
 #redirect to GitHub's OAuth page and confirm callback URL
 @app.route('/login')
@@ -94,6 +94,8 @@ def authorized():
 @github.tokengetter
 def get_github_oauth_token():
     return session['github_token']
+
+
 
 if __name__=="__main__":
     main()
