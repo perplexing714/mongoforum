@@ -7,24 +7,23 @@ from flask import Flask, redirect, url_for, session, request, jsonify
 from flask import render_template
 from flask_oauthlib.contrib.apps import github
 from flask_oauthlib.client import OAuth
+from markupsafe import Markup 
 
 app = Flask(__name__)
 
-def main():
-    connection_string = os.environ["MONGO_CONNECTION_STRING"]
-    db_name = os.environ["MONGO_DBNAME"]
-    
-    client = pymongo.MongoClient(connection_string)
-    db = client[db_name]
-    collection = db['birds'] #1. put the name of your collection in the quotes
-    
-    # Send a ping to confirm a successful connection
-    try:
-        client.admin.command('ping')
-        print("Pinged your deployment. You successfully connected to MongoDB!")
-    except Exception as e:
-        print(e)
+connection_string = os.environ["MONGO_CONNECTION_STRING"]
+client = pymongo.MongoClient(connection_string) 
+# Send a ping to confirm a successful connection
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+     print(e)
 
+db_name = os.environ["MONGO_DBNAME"]
+    
+birdsDB = client[db_name]
+mongoBirds = birdsDB['birds']
 app.debug = False #Change this to False for production
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #Remove once done debugging
 
@@ -54,11 +53,43 @@ def inject_logged_in():
 
 @app.route('/')
 def forum_login():
+    if "comment" in session:
+        session.pop("comment")
     return render_template('forum.html')
 
 @app.route('/forum') 
 def forum_home():
-    return render_template('actualforum.html')
+    posts = ""
+    for doc in mongoBirds.find():
+        posts += Markup("<p>" + str(doc["User"]) + ": " + str(doc["Message"]) + "</p>") 
+    return render_template('actualforum.html', posts=posts)
+ 
+@app.route('/createPost', methods=["GET", "POST"])
+def create_post():
+    if "comment" in session: 
+        content = request.form['content']
+        if session["comment"] != content:
+            print("hi2")
+            username = session['user_data']['login']
+            doc = {"User":username, "Message":content }
+            mongoBirds.insert_one(doc)
+            session["comment"] = content 
+        else:
+            posts = ""
+            for doc in mongoBirds.find():
+                posts += Markup("<p>" + str(doc["User"]) + ": " + str(doc["Message"]) + "</p>" + "<br>")
+            return render_template('actualforum.html', posts=posts)
+    else:
+        print("hi") 
+        content = request.form['content']
+        username = session['user_data']['login']
+        doc = {"User":username, "Message":content }
+        mongoBirds.insert_one(doc)
+        session["comment"] = content 
+    posts = ""
+    for doc in mongoBirds.find():
+        posts += Markup("<p>" + str(doc["User"]) + ": " + str(doc["Message"]) + "</p>" + "<br>")
+    return render_template('actualforum.html', posts=posts)
 
 #redirect to GitHub's OAuth page and confirm callback URL
 @app.route('/login')
@@ -97,8 +128,6 @@ def get_github_oauth_token():
 
 
 
-if __name__=="__main__":
-    main()
 
 
 
