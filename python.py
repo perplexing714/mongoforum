@@ -55,7 +55,11 @@ def inject_logged_in():
 def forum_login():
     if "comment" in session:
         session.pop("comment")
-    return render_template('forum.html')
+    if logged_in = false:
+        return render_template('forum.html')
+    else:
+        return redirect(url_for('/forum'))
+    
 
 @app.route('/forum') 
 def forum_home():
