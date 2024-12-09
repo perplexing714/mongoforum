@@ -55,20 +55,11 @@ def inject_logged_in():
 def forum_login():
     if "comment" in session:
         session.pop("comment")
-<<<<<<< HEAD
     if "github_token" in session:
         return redirect(url_for('forum_home'))
     else:
         return render_template('forum.html')
-
-=======
-    if logged_in = false:
-        return render_template('forum.html')
-    else:
-        return redirect(url_for('/forum'))
     
->>>>>>> 6f445d4958e6e928579b4e4c2cc1ff136300648c
-
 @app.route('/forum') 
 def forum_home():
     if "github_token" not in session: 
