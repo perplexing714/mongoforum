@@ -55,13 +55,20 @@ def inject_logged_in():
 def forum_login():
     if "comment" in session:
         session.pop("comment")
-    return render_template('forum.html')
+    if "github_token" in session:
+        return redirect(url_for('forum_home'))
+    else:
+        return render_template('forum.html')
+
 
 @app.route('/forum') 
 def forum_home():
-    posts = ""
-    for doc in mongoBirds.find():
-        posts += Markup("<p>" + str(doc["User"]) + ": " + str(doc["Message"]) + "</p>") 
+    if "github_token" not in session: 
+        return redirect(url_for('forum_login'))
+    else:
+        posts = ""
+        for doc in mongoBirds.find():
+            posts += Markup("<p>" + str(doc["User"]) + ": " + str(doc["Message"]) + "</p>") 
     return render_template('actualforum.html', posts=posts)
  
 @app.route('/createPost', methods=["GET", "POST"])
@@ -77,7 +84,7 @@ def create_post():
         else:
             posts = ""
             for doc in mongoBirds.find():
-                posts += Markup("<p>" + str(doc["User"]) + ": " + str(doc["Message"]) + "</p>" + "<br>")
+                posts += Markup("<p>" + str(doc["User"]) + ": " + str(doc["Message"]) + "</p>")
             return render_template('actualforum.html', posts=posts)
     else:
         print("hi") 
@@ -88,7 +95,7 @@ def create_post():
         session["comment"] = content 
     posts = ""
     for doc in mongoBirds.find():
-        posts += Markup("<p>" + str(doc["User"]) + ": " + str(doc["Message"]) + "</p>" + "<br>")
+        posts += Markup("<p>" + str(doc["User"]) + ": " + str(doc["Message"]) + "</p>")
     return render_template('actualforum.html', posts=posts)
 
 #redirect to GitHub's OAuth page and confirm callback URL
