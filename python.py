@@ -24,8 +24,8 @@ db_name = os.environ["MONGO_DBNAME"]
     
 birdsDB = client[db_name]
 mongoBirds = birdsDB['birds']
-app.debug = False #Change this to False for production
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #Remove once done debugging
+app.debug = True #Change this to False for production
+#os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1' #Remove once done debugging
 
 app.secret_key = os.environ['SECRET_KEY'] #used to sign session cookies
 oauth = OAuth(app)
