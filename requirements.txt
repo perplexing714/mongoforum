@@ -5,3 +5,4 @@ MarkupSafe
 Werkzeug
 wheel
 gunicorn
+flask_oauthlib
