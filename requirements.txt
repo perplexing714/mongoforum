@@ -19,4 +19,4 @@ Tempita
 Werkzeug
 wheel
 WTForms
-
+flask_oauthlib
