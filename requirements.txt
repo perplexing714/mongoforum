@@ -19,3 +19,4 @@ Tempita
 wheel
 WTForms
 flask_oauthlib
+url_quote
