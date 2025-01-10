@@ -19,3 +19,4 @@ Tempita
 wheel
 WTForms
 flask_oauthlib
+Werkzeug==2.2.2
