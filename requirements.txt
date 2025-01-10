@@ -16,7 +16,6 @@ SQLAlchemy
 sqlalchemy-migrate
 sqlparse
 Tempita
-Werkzeug
 wheel
 WTForms
 flask_oauthlib
